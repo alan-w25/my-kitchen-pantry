@@ -1,25 +1,24 @@
 import React from 'react'
 import {useTheme} from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import {styled} from '@mui/material/styles';
-import Divider from '@mui/material/Divider';
-import { IconButton } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListIcon from '@mui/icons-material/List';
 import MailIcon from '@mui/icons-material/Mail';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Typography from '@mui/material/Typography';
 import CropFreeIcon from '@mui/icons-material/CropFree';
 import OutdoorGrillIcon from '@mui/icons-material/OutdoorGrill';
-import Button from '@mui/material/Button';
-import Link from 'next/link';
-
+import {Box, 
+  Drawer, 
+  List, 
+  ListItem, 
+  ListItemText, 
+  Divider, 
+  IconButton,  
+  ListItemButton, 
+  ListItemIcon,
+  Button,
+  Link, 
+  Typography} from '@mui/material';
 
 
 
@@ -35,6 +34,18 @@ export default function NavBar({ drawerOpen, toggleDrawer, handleSignIn }) {
       justifyContent: 'flex-end',
       backgroundColor: theme.palette.background.default,
     }));
+
+    const navigationItems = [
+      { text: 'Pantry Item List', path: '/items-list' },
+      { text: 'Barcode Scanner', path: '/barcode-scanner' }
+    ];
+
+    const navItems2 =  [
+      { text: 'Category Item List', path: '/categories-list' },
+    ]
+    const navItems3 = [
+      { text: 'Recipe Reccomendation', path: '/recipe-reccomendation' }
+    ]
     
     
   return (
@@ -48,7 +59,7 @@ export default function NavBar({ drawerOpen, toggleDrawer, handleSignIn }) {
         </IconButton>
       </DrawerHeader>
       <Box sx={{ px: 2, py: 1 }}>
-          <Link href="/" passHref>
+          <Link href="/">
             <Button variant="contained" sx = {{color: "#FFFFFF"}} fullWidth>
               Home
             </Button>
@@ -62,41 +73,57 @@ export default function NavBar({ drawerOpen, toggleDrawer, handleSignIn }) {
       <Typography sx = {{fontWeight: 600, ml:2}}>Pantry Items</Typography>
       <Divider />
       <List sx = {{backgroundColor: theme.palette.background.default}}>
-          {['Pantry Item List', 'Barcode Scanner'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <ListIcon /> : <CropFreeIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
+          {navigationItems.map((item, index) => (
+            
+            <ListItem key={item.text} disablePadding>
+              <Link href={item.path} sx = {{
+                textDecoration: 'none',
+                width:"100%"
+              }}>
+                <ListItemButton>
+                  <ListItemIcon>
+                    {index % 2 === 0 ? <ListIcon /> : <CropFreeIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </Link>
             </ListItem>
           ))}
       </List>
       <Typography sx = {{fontWeight: 600, ml:2}}>Categories</Typography>
       <Divider /> 
       <List sx = {{backgroundColor: theme.palette.background.default}}>
-        {['Category Item List'].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        {navItems2.map((item, index) => (
+          <ListItem key={item.text} disablePadding>
+            <Link href={item.path} sx = {{
+              textDecoration:'none', 
+              width:"100%"
+            }}>
             <ListItemButton>
               <ListItemIcon>
                 {index % 2 === 0 ? <ListIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={item.text} />
             </ListItemButton>
+            </Link>
           </ListItem>
         ))}
       </List>
       <Divider /> 
       <List sx = {{backgroundColor: theme.palette.background.default}}>
-        {['Recipe Reccomendation'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <OutdoorGrillIcon />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
+        {navItems3.map((item, index) => (
+          <ListItem key={item.text} disablePadding>
+            <Link href={item.path} sx ={{
+              textDecoration: 'none',
+              width:"100%"
+            }}>
+              <ListItemButton>
+                <ListItemIcon>
+                  <OutdoorGrillIcon />
+                </ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </Link>
           </ListItem>
         ))}
       </List>

@@ -48,12 +48,12 @@ export default function AuthForm() {
                     <TextField fullWidth label="Email Address" margin="normal" />  
                     <TextField fullWidth label="Password" type="password" margin="normal" />
                     
-                    <Link href="#" passHref onClick = {handleSignInClick}>
+                    <Link href="#" onClick = {handleSignInClick}>
                         <Typography sx={{color:"#000000", mt:8}}>
                             Forgot Password?
                         </Typography>
                     </Link>
-                    <Link href="#" passHref onClick = {handleSignUpClick}>
+                    <Link href="#" onClick = {handleSignUpClick}>
                         <Typography sx={{color:"#000000"}}>
                             Don't have an account? Sign up
                         </Typography>
@@ -76,7 +76,7 @@ export default function AuthForm() {
                     <TextField fullWidth label="Confirm Password" type="password" margin="normal" />
                     
                     
-                    <Link href="#" passHref onClick = {handleSignInClick}>
+                    <Link href="#" onClick = {handleSignInClick}>
                         <Typography sx={{color:"#000000", mt:8}}>
                             Already have an account? Sign in
                         </Typography>

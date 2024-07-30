@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import Box from "@mui/material/Box";
+import AddItemForm from "../../components/AddItemForm";
 
 const CategoriesPage = () => {
-  return <Box>hELLO WELCOM TO CATEGORIES</Box>;
+  return <AddItemForm />;
 };
 
 export default CategoriesPage;
