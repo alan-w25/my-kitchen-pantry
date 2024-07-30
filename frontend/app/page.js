@@ -35,6 +35,7 @@ export default function Home() {
           p: 4,
           minHeight: "25vh",
           borderRadius: 4,
+          boxShadow: 1,
         }}
       >
         <Grid

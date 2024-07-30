@@ -12,6 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from "@mui/material/useMediaQuery"
 import  {useState} from 'react';
 import NavBar from './NavBar';
+import Link from 'next/link';
 
 
 export default function Header() {
@@ -47,7 +48,9 @@ export default function Header() {
           <Typography variant={isSmallScreen ? "subtitle1" : "h6"} component="div" sx={{ flexGrow: 1 }}>
             My Kitchen Pantry App
           </Typography>
-          <Button color="inherit">{isSmallScreen ? "Sign In": "Sign In/Sign Up"}</Button>
+          <Link href="/auth" passHref>
+            <Button sx={{color: "#FFFFFF"}} >{isSmallScreen ? "Sign In": "Sign In/Sign Up"}</Button>
+          </Link>
         </Toolbar>
       </AppBar>
       <NavBar drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} />

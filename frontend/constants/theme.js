@@ -12,7 +12,7 @@ const poppins = Poppins({
 const theme = createTheme({
   palette: {
     background: {
-      default: "F7EFE4",
+      default: "#F7EFE4",
       secondary: "#F5E6D6",
     },
     primary: {
