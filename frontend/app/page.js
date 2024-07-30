@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import Header from "@/components/Header";
 import { Box, Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Typography } from "@mui/material";
@@ -11,7 +10,6 @@ export default function Home() {
 
   return (
     <main>
-      <Header />
       <Box
         sx={{
           backgroundColor: theme.palette.background.secondary,

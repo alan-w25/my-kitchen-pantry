@@ -15,7 +15,6 @@ import MailIcon from '@mui/icons-material/Mail';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Typography from '@mui/material/Typography';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import CropFreeIcon from '@mui/icons-material/CropFree';
 import OutdoorGrillIcon from '@mui/icons-material/OutdoorGrill';
 import Button from '@mui/material/Button';
@@ -24,7 +23,7 @@ import Link from 'next/link';
 
 
 
-export default function NavBar({ drawerOpen, toggleDrawer }) {
+export default function NavBar({ drawerOpen, toggleDrawer, handleSignIn }) {
     const theme = useTheme();
 
     const DrawerHeader = styled('div')(({ theme }) => ({
@@ -56,11 +55,9 @@ export default function NavBar({ drawerOpen, toggleDrawer }) {
           </Link>
       </Box>
       <Box sx={{ px: 2, py: 1 }}>
-          <Link href="/auth" passHref>
-            <Button variant="contained" sx = {{color: "#FFFFFF"}} fullWidth>
+            <Button variant="contained" onClick = {handleSignIn} sx = {{color: "#FFFFFF"}} fullWidth>
               Sign In / Sign Up
             </Button>
-          </Link>
       </Box>
       <Typography sx = {{fontWeight: 600, ml:2}}>Pantry Items</Typography>
       <Divider />

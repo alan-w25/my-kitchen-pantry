@@ -13,12 +13,15 @@ import useMediaQuery from "@mui/material/useMediaQuery"
 import  {useState} from 'react';
 import NavBar from './NavBar';
 import Link from 'next/link';
+import BasicModal from './AuthModal';
 
 
 export default function Header() {
     const [drawerOpen, setDrawerOpen] =  useState(false);
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const [signInOpen, setSignInOpen] = useState(false); 
+
 
 
     const toggleDrawer = (open) => (event) => {
@@ -31,6 +34,9 @@ export default function Header() {
           setDrawerOpen(open);
       
     }
+    const handleOpen = () => setSignInOpen(true);
+    const handleClose = () => setSignInOpen(false);
+
   return (
     <Box sx={{ flexGrow: 1, backgroundColor:theme.palette.primary.main}}>
       <AppBar position="static">
@@ -48,12 +54,13 @@ export default function Header() {
           <Typography variant={isSmallScreen ? "subtitle1" : "h6"} component="div" sx={{ flexGrow: 1 }}>
             My Kitchen Pantry App
           </Typography>
-          <Link href="/auth" passHref>
-            <Button sx={{color: "#FFFFFF"}} >{isSmallScreen ? "Sign In": "Sign In/Sign Up"}</Button>
-          </Link>
+          <Button sx={{color: "#FFFFFF"}} onClick={handleOpen} >{isSmallScreen ? "Sign In": "Sign In/Sign Up"}</Button>
         </Toolbar>
       </AppBar>
-      <NavBar drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} />
+      <NavBar drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} handleSignIn={handleOpen} />
+      <BasicModal open={signInOpen} handleClose={handleClose} />
+
+
     </Box>
   );
 }

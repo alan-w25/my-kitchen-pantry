@@ -28,7 +28,10 @@ export default function AuthForm() {
     }
 
     return (
-        <Box sx = {{mt: 4, mx: 4, minWidth: "25vw", width: "30vw", backgroundColor: theme.palette.background.secondary, boxShadow: 1, borderRadius: 4}}>
+        <Box sx = {{
+            width: "100%", 
+            height:"100%",
+            backgroundColor: theme.palette.background.secondary}}>
             <Tabs sx={{display:'flex', justifyContent: 'space-between'}} value={value} onChange = {handleChange} aria-label="sign-in sign-up tabs">
                 <Tab label="Sign In" sx = {{flexGrow: 1}}/>
                 <Tab label="Sign Up" sx = {{flexGrow: 1}}/>
@@ -44,13 +47,16 @@ export default function AuthForm() {
 
                     <TextField fullWidth label="Email Address" margin="normal" />  
                     <TextField fullWidth label="Password" type="password" margin="normal" />
-                    <Link href="#" passHref onClick = {handleSignUpClick}>
+                    
+                    <Link href="#" passHref onClick = {handleSignInClick}>
                         <Typography sx={{color:"#000000", mt:8}}>
+                            Forgot Password?
+                        </Typography>
+                    </Link>
+                    <Link href="#" passHref onClick = {handleSignUpClick}>
+                        <Typography sx={{color:"#000000"}}>
                             Don't have an account? Sign up
                         </Typography>
-                        
-                    
-                    
                     </Link>
 
 
@@ -68,7 +74,8 @@ export default function AuthForm() {
                     <TextField fullWidth label="Email Address" margin="normal" /> 
                     <TextField fullWidth label="Password" type="password" margin="normal" /> 
                     <TextField fullWidth label="Confirm Password" type="password" margin="normal" />
-
+                    
+                    
                     <Link href="#" passHref onClick = {handleSignInClick}>
                         <Typography sx={{color:"#000000", mt:8}}>
                             Already have an account? Sign in
