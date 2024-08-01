@@ -31,7 +31,6 @@ export default function AddItemForm({handleModalClose, fetchData}) {
         description: "",
         category: "",
         quantity: "",
-        upcCode: ""
     })
     const [snackbar, setSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState(''); 
@@ -93,7 +92,6 @@ export default function AddItemForm({handleModalClose, fetchData}) {
                 description: "",
                 category: "",
                 quantity: "",
-                upcCode: "" 
             })
             handleSnackbar("Success", "Item added successfully");
             handleModalClose();
@@ -157,13 +155,6 @@ export default function AddItemForm({handleModalClose, fetchData}) {
                 <TextField required value = {form.quantity} onChange={ (e) => {setForm({...form, quantity: e.target.value})}} fullWidth label="Quantity" margin="normal" sx = {{
                     height: "10%"
                 }}/>
-                <TextField value = {form.upcCode} onChange={ (e) => {setForm({...form, upcCode: e.target.value})}} label="UPC Code" margin="normal" sx={{
-                    width:"40%",
-                    height: "10%"
-                }} />
-                <Button variant="contained" sx={{ml:2, mt:3}}>
-                    Search for UPC Code
-                </Button>
 
                 <Button variant="contained" onClick = {handleCreateItem} sx = {{mt:8, width:"10vw"}}>
                     Add Item

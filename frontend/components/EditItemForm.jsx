@@ -30,7 +30,6 @@ export default function EditItemForm({handleModalClose, fetchData, currentRow}) 
         description: currentRow.description || "",
         category: currentRow.category || "",
         quantity: currentRow.quantity.toString() || "",
-        upcCode: currentRow.upcCode || ""
     });
     const [snackbar, setSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -82,7 +81,6 @@ export default function EditItemForm({handleModalClose, fetchData, currentRow}) 
                 itemName: form.itemName,
                 description: form.description, 
                 category: categoryName,
-                upcCode: form.upcCode,
                 quantity: parseInt(form.quantity, 10),
             });
             handleSnackbar("Success", "Item edited successfully");
@@ -146,13 +144,6 @@ export default function EditItemForm({handleModalClose, fetchData, currentRow}) 
                 <TextField required value = {form.quantity} onChange={ (e) => {setForm({...form, quantity: e.target.value})}} fullWidth label="Quantity" margin="normal" sx = {{
                     height: "10%"
                 }}/>
-                <TextField value = {form.upcCode} onChange={ (e) => {setForm({...form, upcCode: e.target.value})}} label="UPC Code" margin="normal" sx={{
-                    width:"40%",
-                    height: "10%"
-                }} />
-                <Button variant="contained" sx={{ml:2, mt:3}}>
-                    Search for UPC Code
-                </Button>
 
                 <Button variant="contained" onClick = {handleEditItem} sx = {{mt:8, width:"10vw"}}>
                     Edit Item
