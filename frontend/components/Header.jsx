@@ -55,7 +55,7 @@ export default function Header() {
           <Typography variant={isSmallScreen ? "subtitle1" : "h6"} component="div" sx={{ flexGrow: 1 }}>
             {currentUser ? `${currentUser.displayName}'s Kitchen Pantry` : "Kitchen Pantry"}
           </Typography>
-          {!currentUser && (<Button sx={{color: "#FFFFFF"}} onClick={handleOpen} >{isSmallScreen ? "Sign In": "Sign In/Sign Up"}</Button>)}
+          {!currentUser && (<Link href="/"><Button sx={{color: "#FFFFFF"}} onClick={handleOpen} >{isSmallScreen ? "Sign In": "Sign In/Sign Up"}</Button></Link>)}
         </Toolbar>
       </AppBar>
       <NavBar drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} handleSignIn={handleOpen} />

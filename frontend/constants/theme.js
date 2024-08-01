@@ -28,6 +28,14 @@ const theme = createTheme({
     secondary: {
       main: "#D9DFDD",
     },
+    chart: {
+      main: "#E9A9B6",
+      two: "#335B4C",
+      three: "#9DBECD",
+      four: "#A12938",
+      five: "#F7EFE4",
+      six: "#F5E6D6",
+    },
   },
   components: {
     MuiCssBaseline: {

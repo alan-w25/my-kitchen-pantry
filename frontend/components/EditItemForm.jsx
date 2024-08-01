@@ -1,8 +1,10 @@
 "use client"; 
 import { db } from '../firebase'; 
-import { collection, setDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, setDoc, doc, getDocs } from 'firebase/firestore';
 import React, {useState, useEffect} from "react"; 
+import AddCategoryModal from './AddCategoryModal';
 import {useTheme} from "@mui/material/styles";
+import {useAuth} from "../hooks/AuthProvider";
 import {Box, 
     Typography, 
     TextField, 
@@ -17,12 +19,10 @@ import {Box,
     from "@mui/material";
 
 
-
-
-
 export default function EditItemForm({handleModalClose, fetchData, currentRow}) {
     //hooks
     const theme = useTheme()
+    const { currentUser } = useAuth();
 
     //state definitions
     const [form, setForm] = useState({
@@ -35,7 +35,31 @@ export default function EditItemForm({handleModalClose, fetchData, currentRow}) 
     const [snackbar, setSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const showCategory = false;
+    const [categories, setCategories] = useState([]);
+    const [addModalOpen, setAddModalOpen] = useState(false);
+
+
+    const handleAddModalOpen = () => setAddModalOpen(true);
+    const handleAddModalClose = () => setAddModalOpen(false);
+
+    const fetchCategoryData = async () => {
+        try {
+            const categoryCollection = currentUser
+              ? collection(db, "users", currentUser.uid, "categories")
+              : collection(db, "categories");
     
+            const querySnapshot = await getDocs(categoryCollection);
+            const fetchedCategories = querySnapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+    
+            // Set the fetched categories to state
+            setCategories(fetchedCategories);
+          } catch (error) {
+            console.error("Error fetching categories:", error);
+          }
+    }
 
     //function handlers
     const handleSnackbar = (type, message) => {
@@ -50,9 +74,15 @@ export default function EditItemForm({handleModalClose, fetchData, currentRow}) 
         }
 
         try {
-            await setDoc(doc(db, "items", currentRow.id), {
+            const selectedCategory = categories.find(cat => cat.id === form.category);
+            const categoryName = selectedCategory ? selectedCategory.categoryName : "None";
+
+            const toDoc = currentUser ? doc(db, "users", currentUser.uid, "items", currentRow.id) : doc(db, "items", currentRow.id);
+            await setDoc(toDoc, {
                 itemName: form.itemName,
                 description: form.description, 
+                category: categoryName,
+                upcCode: form.upcCode,
                 quantity: parseInt(form.quantity, 10),
             });
             handleSnackbar("Success", "Item edited successfully");
@@ -60,10 +90,13 @@ export default function EditItemForm({handleModalClose, fetchData, currentRow}) 
             fetchData();
         } catch (error) {
             console.log("Error adding document: ", error);
-            handleSnackbar("Error", "Error adding document: " + error.message);
+            handleSnackbar("Error", "Error editing document: " + error.message);
         }
 
     }
+    useEffect( () => {
+        fetchCategoryData();
+    }, [currentUser, fetchData])
 
 
     return (
@@ -92,25 +125,24 @@ export default function EditItemForm({handleModalClose, fetchData, currentRow}) 
                         height: "10%"
                     }}
                 />                  
-               {showCategory && (<FormControl sx = {{
+               <FormControl sx = {{
                 width: "50%",
                 mt: 1
                }}>
-                    <InputLabel>Category</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        label="Age"
-                    >
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
-                    </Select>
+                <InputLabel>Category</InputLabel>
+                <Select
+                    value = {form.category}
+                    onChange = {(e) => {setForm({...form, category: e.target.value})}}
+                >
+                    {categories.map((category) => (
+                        <MenuItem key={category.id} value={category.id}>
+                            {category.categoryName}
+                        </MenuItem>
+                    ))}
+                </Select>
                     
-                </FormControl> )}
-                {showCategory && (
-                    <Button variant="contained" sx = {{ml:2, mt:2}}>Add New Category</Button> 
-                )}
+                </FormControl>
+                <Button variant="contained" onClick = {handleAddModalOpen} sx = {{ml:2, mt:2}}>Add New Category</Button> 
                 <TextField required value = {form.quantity} onChange={ (e) => {setForm({...form, quantity: e.target.value})}} fullWidth label="Quantity" margin="normal" sx = {{
                     height: "10%"
                 }}/>
@@ -133,6 +165,12 @@ export default function EditItemForm({handleModalClose, fetchData, currentRow}) 
                     {snackbarMessage}
                 </Alert>
             </Snackbar>
+
+            <AddCategoryModal 
+                open={addModalOpen}
+                handleClose={handleAddModalClose}
+                onCategoryAdded = {fetchCategoryData}
+            />
 
         </Box>
     )

@@ -1,8 +1,10 @@
 "use client"; 
-import { db} from '../firebase'; 
-import { collection, addDoc } from 'firebase/firestore';
-import React, {useState} from "react"; 
+import { db } from '../firebase'; 
+import { collection, addDoc, getDocs } from 'firebase/firestore';
+import React, {useState, useEffect} from "react"; 
 import {useTheme} from "@mui/material/styles";
+import { useAuth } from '../hooks/AuthProvider';
+import AddCategoryModal from './AddCategoryModal';
 import {Box, 
     Typography, 
     TextField, 
@@ -22,6 +24,7 @@ import {Box,
 
 export default function AddItemForm({handleModalClose, fetchData}) {
     const theme = useTheme()
+    const { currentUser } = useAuth();
 
     const [form, setForm] = useState({
         itemName: "",
@@ -31,9 +34,38 @@ export default function AddItemForm({handleModalClose, fetchData}) {
         upcCode: ""
     })
     const [snackbar, setSnackbar] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarMessage, setSnackbarMessage] = useState(''); 
+    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState("");
+    const [addModalOpen, setAddModalOpen] = useState(false);
 
-    const showCategory = false;
+    
+
+
+    //functions 
+
+    const handleAddModalOpen = () => setAddModalOpen(true);
+    const handleAddModalClose = () => setAddModalOpen(false);
+
+    const fetchCategoryData = async () => {
+        try {
+            const categoryCollection = currentUser
+              ? collection(db, "users", currentUser.uid, "categories")
+              : collection(db, "categories");
+    
+            const querySnapshot = await getDocs(categoryCollection);
+            const fetchedCategories = querySnapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+    
+            // Set the fetched categories to state
+            setCategories(fetchedCategories);
+          } catch (error) {
+            console.error("Error fetching categories:", error);
+          }
+    }
+
 
     const handleSnackbar = (type, message) => {
         setSnackbarMessage(type + ' ' + message);
@@ -47,7 +79,10 @@ export default function AddItemForm({handleModalClose, fetchData}) {
         }
 
         try {
-            await addDoc(collection(db, "items"), {
+            console.log(currentUser)
+            const newCollection = currentUser ? collection(db, "users", currentUser.uid, "items") : collection(db, "items");
+            console.log(newCollection);
+            await addDoc(newCollection, {
                 itemName: form.itemName,
                 description: form.description, 
                 quantity: parseInt(form.quantity, 10),
@@ -69,6 +104,10 @@ export default function AddItemForm({handleModalClose, fetchData}) {
         }
 
     }
+
+    useEffect( () => {
+        fetchCategoryData();
+    }, [currentUser, fetchData])
 
 
     return (
@@ -97,25 +136,24 @@ export default function AddItemForm({handleModalClose, fetchData}) {
                         height: "10%"
                     }}
                 />                  
-               {showCategory && (<FormControl sx = {{
-                width: "50%",
-                mt: 1
-               }}>
+                <FormControl sx = {{
+                    width: "50%",
+                    mt: 1
+                }}>
                     <InputLabel>Category</InputLabel>
                     <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        label="Age"
+                        value = {category}
+                        onChange = {(e) => {setCategory(e.target.value)}}
                     >
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        {categories.map((category) => (
+                            <MenuItem key={category.id} value={category.id}>
+                                {category.categoryName}
+                            </MenuItem>
+                        ))}
                     </Select>
                     
-                </FormControl> )}
-                {showCategory && (
-                    <Button variant="contained" sx = {{ml:2, mt:2}}>Add New Category</Button> 
-                )}
+                </FormControl>
+                <Button variant="contained" onClick = {handleAddModalOpen} sx = {{ml:2, mt:2}}>Add New Category</Button> 
                 <TextField required value = {form.quantity} onChange={ (e) => {setForm({...form, quantity: e.target.value})}} fullWidth label="Quantity" margin="normal" sx = {{
                     height: "10%"
                 }}/>
@@ -138,6 +176,12 @@ export default function AddItemForm({handleModalClose, fetchData}) {
                     {snackbarMessage}
                 </Alert>
             </Snackbar>
+
+            <AddCategoryModal 
+                open={addModalOpen}
+                handleClose={handleAddModalClose}
+                onCategoryAdded = {fetchCategoryData}
+            />
 
         </Box>
     )

@@ -81,17 +81,21 @@ export default function NavBar({ drawerOpen, toggleDrawer, handleSignIn }) {
       </Box>
 
       {!currentUser && (<Box sx={{ px: 2, py: 1 }}>
-            <Button variant="contained" onClick = {() => {
-              handleSignIn();
-              toggleDrawer(false)(); 
-            }} sx = {{color: "#FFFFFF"}} fullWidth>
-              Sign In / Sign Up
-            </Button>
+            <Link href="/">
+              <Button variant="contained" onClick = {() => {
+                handleSignIn();
+                toggleDrawer(false)(); 
+              }} sx = {{color: "#FFFFFF"}} fullWidth>
+                Sign In / Sign Up
+              </Button>
+            </Link>
       </Box>)}
       {currentUser && (<Box sx={{ px: 2, py: 1 }}>
-            <Button variant="contained" onClick = {handleSignOut} sx = {{color: "#FFFFFF"}} fullWidth>
-              Sign Out
-            </Button>
+            <Link href="/">
+              <Button variant="contained" onClick = {handleSignOut} sx = {{color: "#FFFFFF"}} fullWidth>
+                Sign Out
+              </Button>
+            </Link>
       </Box>)}
       <Typography sx = {{fontWeight: 600, ml:2}}>Pantry Items</Typography>
       <Divider />

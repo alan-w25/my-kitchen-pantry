@@ -1,18 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Box } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { useMovieData } from "@mui/x-data-grid-generator";
 import AddIcon from "@mui/icons-material/Add";
-import Fab from "@mui/material/Fab";
-import { Link, Typography, IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import AddItemModal from "../../components/AddItemModal";
 import EditItemModal from "../../components/EditItemModal";
 import { db } from "../../firebase";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import { useAuth } from "../../hooks/AuthProvider";
+import { Box, useTheme, Fab, Typography, IconButton } from "@mui/material";
 
 export default function ItemsPage() {
   //state definition
@@ -23,6 +20,7 @@ export default function ItemsPage() {
 
   //hook definitions
   const theme = useTheme();
+  const { currentUser } = useAuth();
 
   //data grid data
   const columns = [
@@ -68,11 +66,16 @@ export default function ItemsPage() {
 
   //fetch data functions
   const fetchData = async () => {
-    const querySnapshot = await getDocs(collection(db, "items"));
-    const itemsData = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const getCollection = currentUser
+      ? collection(db, "users", currentUser.uid, "items")
+      : collection(db, "items");
+    const querySnapshot = await getDocs(getCollection);
+    const itemsData = querySnapshot.docs
+      .map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+      .filter((item) => item.itemName !== "initialItem");
     setRows(itemsData);
   };
 
@@ -84,7 +87,10 @@ export default function ItemsPage() {
   const handleDelete = async (id) => {
     try {
       console.log("Deleting item with id: ", id);
-      await deleteDoc(doc(db, "items", id));
+      const toDelete = currentUser
+        ? doc(db, "users", currentUser.uid, "items", id)
+        : doc(db, "items", id);
+      await deleteDoc(toDelete);
       fetchData();
     } catch (error) {
       console.error("Error deleting document: ", error);

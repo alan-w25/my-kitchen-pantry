@@ -52,10 +52,20 @@ export function AuthProvider({ children }) {
         "initialItem"
       );
       await setDoc(initialItemDocRef, {
-        itemName: "",
+        itemName: "initialItem",
         description: "",
         category: "",
         quantity: 0,
+      });
+
+      //create a cateogories collection under current user
+      const initialCategoryDocRef = doc(
+        collection(db, "users", auth.currentUser.uid, "categories"),
+        "defaultCategory"
+      );
+      await setDoc(initialCategoryDocRef, {
+        categoryName: "None",
+        description: "default category",
       });
 
       logout();
