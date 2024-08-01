@@ -51,14 +51,12 @@ export default function NavBar({ drawerOpen, toggleDrawer, handleSignIn }) {
 
     const navigationItems = [
       { text: 'Pantry Item List', path: '/items-list' },
-      { text: 'Barcode Scanner', path: '/barcode-scanner' }
     ];
 
     const navItems2 =  [
       { text: 'Category Item List', path: '/categories-list' },
     ]
     const navItems3 = [
-      { text: 'Recipe Reccomendation', path: '/recipe-reccomendation' }
     ]
     
     
