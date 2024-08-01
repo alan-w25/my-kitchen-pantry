@@ -2,6 +2,12 @@
 
 import { Poppins } from "next/font/google";
 import { createTheme } from "@mui/material/styles";
+import NextLink from "next/link";
+import { forwardRef } from "react";
+
+const LinkBehavior = forwardRef(function LinkBehavior(props, ref) {
+  return <NextLink ref={ref} {...props} />;
+});
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "700"],
@@ -29,6 +35,16 @@ const theme = createTheme({
         body: {
           backgroundColor: "#F7EFE4", // Set the background color here
         },
+      },
+    },
+    MuiLink: {
+      defaultProps: {
+        component: LinkBehavior,
+      },
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        LinkComponent: LinkBehavior,
       },
     },
   },

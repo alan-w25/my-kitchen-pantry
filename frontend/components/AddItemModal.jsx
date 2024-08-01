@@ -1,16 +1,13 @@
 "use client";
 import React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import AuthForm from './AuthForm';
 import { useTheme } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import AddItemForm from './AddItemForm';
+import { Box, Button, Typography, Modal, IconButton } from '@mui/material';
 
-export default function BasicModal({handleClose, open }) {
+export default function AddItemModal({handleClose, open, fetchData }) {
     const theme = useTheme();
+    
 
   return (
     <div>
@@ -25,7 +22,7 @@ export default function BasicModal({handleClose, open }) {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 400,
+            width: "35vw",
             bgcolor: theme.palette.background.secondary,
             borderRadius: 2,
             boxShadow: 24,
@@ -40,10 +37,9 @@ export default function BasicModal({handleClose, open }) {
                     <CloseIcon/>
                 </IconButton>
             </Box>
-            <AuthForm handleModalClose={handleClose}/>
+            <AddItemForm handleModalClose={handleClose} fetchData = {fetchData}/>
         </Box>
       </Modal>
     </div>
   );
 }
-

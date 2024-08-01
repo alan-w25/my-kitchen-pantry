@@ -14,6 +14,7 @@ import  {useState} from 'react';
 import NavBar from './NavBar';
 import Link from 'next/link';
 import BasicModal from './AuthModal';
+import { useAuth } from '../hooks/AuthProvider';
 
 
 export default function Header() {
@@ -21,11 +22,11 @@ export default function Header() {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const [signInOpen, setSignInOpen] = useState(false); 
-
+    const { currentUser, logout } = useAuth(); 
 
 
     const toggleDrawer = (open) => (event) => {
-        if (
+        if (event &&
             event.type === 'keydown' &&
             (event.key === 'Tab' || event.key === 'Shift')
           ) {
@@ -52,15 +53,13 @@ export default function Header() {
             <MenuIcon />
           </IconButton>
           <Typography variant={isSmallScreen ? "subtitle1" : "h6"} component="div" sx={{ flexGrow: 1 }}>
-            My Kitchen Pantry App
+            {currentUser ? `${currentUser.displayName}'s Kitchen Pantry` : "Kitchen Pantry"}
           </Typography>
-          <Button sx={{color: "#FFFFFF"}} onClick={handleOpen} >{isSmallScreen ? "Sign In": "Sign In/Sign Up"}</Button>
+          {!currentUser && (<Button sx={{color: "#FFFFFF"}} onClick={handleOpen} >{isSmallScreen ? "Sign In": "Sign In/Sign Up"}</Button>)}
         </Toolbar>
       </AppBar>
       <NavBar drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} handleSignIn={handleOpen} />
       <BasicModal open={signInOpen} handleClose={handleClose} />
-
-
     </Box>
   );
 }

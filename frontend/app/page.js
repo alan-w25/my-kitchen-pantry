@@ -18,6 +18,7 @@ export default function Home() {
           p: 4, // padding: 8px
           height: "50vh",
           borderRadius: 4,
+          boxShadow: 1,
         }}
       >
         <Typography variant="h3" gutterBottom>

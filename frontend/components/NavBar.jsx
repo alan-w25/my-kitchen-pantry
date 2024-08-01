@@ -1,12 +1,14 @@
+"use client";
 import React from 'react'
-import {useTheme} from '@mui/material/styles';
-import {styled} from '@mui/material/styles';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListIcon from '@mui/icons-material/List';
-import MailIcon from '@mui/icons-material/Mail';
-import CropFreeIcon from '@mui/icons-material/CropFree';
+import {useAuth} from '../hooks/AuthProvider';
+
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft"
+import  ChevronRightIcon from "@mui/icons-material/ChevronRight"
+import ListIcon from "@mui/icons-material/List"
+import MailIcon from "@mui/icons-material/Mail"
+import CropFreeIcon from "@mui/icons-material/CropFree"
 import OutdoorGrillIcon from '@mui/icons-material/OutdoorGrill';
+
 import {Box, 
   Drawer, 
   List, 
@@ -16,14 +18,26 @@ import {Box,
   IconButton,  
   ListItemButton, 
   ListItemIcon,
-  Button,
-  Link, 
+  Button, 
+  Link,
+  useTheme,
+  styled, 
   Typography} from '@mui/material';
 
 
 
 export default function NavBar({ drawerOpen, toggleDrawer, handleSignIn }) {
     const theme = useTheme();
+    const { logout, currentUser} = useAuth();
+
+    const handleSignOut = async () => {
+      try{
+        await logout(); 
+        toggleDrawer(false)();
+      } catch(error){
+        console.log(error);
+      }
+    }
 
     const DrawerHeader = styled('div')(({ theme }) => ({
       display: 'flex',
@@ -60,27 +74,35 @@ export default function NavBar({ drawerOpen, toggleDrawer, handleSignIn }) {
       </DrawerHeader>
       <Box sx={{ px: 2, py: 1 }}>
           <Link href="/">
-            <Button variant="contained" sx = {{color: "#FFFFFF"}} fullWidth>
+            <Button variant="contained" sx = {{color: "#FFFFFF"}} onClick = {toggleDrawer(false)} fullWidth>
               Home
             </Button>
           </Link>
       </Box>
-      <Box sx={{ px: 2, py: 1 }}>
-            <Button variant="contained" onClick = {handleSignIn} sx = {{color: "#FFFFFF"}} fullWidth>
+
+      {!currentUser && (<Box sx={{ px: 2, py: 1 }}>
+            <Button variant="contained" onClick = {() => {
+              handleSignIn();
+              toggleDrawer(false)(); 
+            }} sx = {{color: "#FFFFFF"}} fullWidth>
               Sign In / Sign Up
             </Button>
-      </Box>
+      </Box>)}
+      {currentUser && (<Box sx={{ px: 2, py: 1 }}>
+            <Button variant="contained" onClick = {handleSignOut} sx = {{color: "#FFFFFF"}} fullWidth>
+              Sign Out
+            </Button>
+      </Box>)}
       <Typography sx = {{fontWeight: 600, ml:2}}>Pantry Items</Typography>
       <Divider />
       <List sx = {{backgroundColor: theme.palette.background.default}}>
           {navigationItems.map((item, index) => (
-            
             <ListItem key={item.text} disablePadding>
-              <Link href={item.path} sx = {{
+              <Link component={theme.components.MuiLink.defaultProps.component} href={item.path} sx = {{
                 textDecoration: 'none',
                 width:"100%"
               }}>
-                <ListItemButton>
+                <ListItemButton onClick= {toggleDrawer(false)}>
                   <ListItemIcon>
                     {index % 2 === 0 ? <ListIcon /> : <CropFreeIcon />}
                   </ListItemIcon>
@@ -95,7 +117,7 @@ export default function NavBar({ drawerOpen, toggleDrawer, handleSignIn }) {
       <List sx = {{backgroundColor: theme.palette.background.default}}>
         {navItems2.map((item, index) => (
           <ListItem key={item.text} disablePadding>
-            <Link href={item.path} sx = {{
+            <Link href={item.path} onClick = {toggleDrawer(false)} sx = {{
               textDecoration:'none', 
               width:"100%"
             }}>
@@ -117,7 +139,7 @@ export default function NavBar({ drawerOpen, toggleDrawer, handleSignIn }) {
               textDecoration: 'none',
               width:"100%"
             }}>
-              <ListItemButton>
+              <ListItemButton onClick={toggleDrawer(false)} >
                 <ListItemIcon>
                   <OutdoorGrillIcon />
                 </ListItemIcon>

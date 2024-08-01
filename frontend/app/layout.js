@@ -2,6 +2,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "../constants/theme";
 import Header from "../components/Header";
+import { AuthProvider } from "../hooks/AuthProvider";
 
 export default function RootLayout({ children }) {
   return (
@@ -9,9 +10,11 @@ export default function RootLayout({ children }) {
       <body>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Header />
-            {children}
+            <AuthProvider>
+              <CssBaseline />
+              <Header />
+              {children}
+            </AuthProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
