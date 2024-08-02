@@ -29,7 +29,6 @@ export default function AddItemForm({handleModalClose, fetchData}) {
     const [form, setForm] = useState({
         itemName: "",
         description: "",
-        category: "",
         quantity: "",
     })
     const [snackbar, setSnackbar] = useState(false);
@@ -79,11 +78,14 @@ export default function AddItemForm({handleModalClose, fetchData}) {
 
         try {
             console.log(currentUser)
+            const selectedCategory = categories.find(cat => cat.id === category);
+            const categoryName = selectedCategory ? selectedCategory.categoryName : "None";
             const newCollection = currentUser ? collection(db, "users", currentUser.uid, "items") : collection(db, "items");
             console.log(newCollection);
             await addDoc(newCollection, {
                 itemName: form.itemName,
                 description: form.description, 
+                category: categoryName,
                 quantity: parseInt(form.quantity, 10),
                 date_added: new Date()
             })
@@ -100,7 +102,6 @@ export default function AddItemForm({handleModalClose, fetchData}) {
             console.log("Error adding document: ", error);
             handleSnackbar("Error", "Error adding document: " + error.message);
         }
-
     }
 
     useEffect( () => {
